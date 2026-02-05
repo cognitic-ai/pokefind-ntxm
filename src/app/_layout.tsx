@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { FavoritesProvider } from "@/context/favorites-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs as WebTabs } from "expo-router/tabs";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
@@ -7,7 +8,9 @@ import { Platform, useWindowDimensions } from "react-native";
 export default function Layout() {
   return (
     <ThemeProvider>
-      <TabsLayout />
+      <FavoritesProvider>
+        <TabsLayout />
+      </FavoritesProvider>
     </ThemeProvider>
   );
 }
@@ -41,17 +44,19 @@ function WebTabsLayout() {
       }}
     >
       <WebTabs.Screen
-        name="index"
+        name="(pokedex)"
         options={{
-          title: "Home",
-          tabBarIcon: (props) => <MaterialIcons {...props} name="home" />,
+          title: "Pokédex",
+          tabBarIcon: (props) => (
+            <MaterialIcons {...props} name="catching-pokemon" />
+          ),
         }}
       />
       <WebTabs.Screen
-        name="info"
+        name="(favorites)"
         options={{
-          title: "Info",
-          tabBarIcon: (props) => <MaterialIcons {...props} name="info" />,
+          title: "Favorites",
+          tabBarIcon: (props) => <MaterialIcons {...props} name="favorite" />,
         }}
       />
     </WebTabs>
@@ -61,24 +66,34 @@ function WebTabsLayout() {
 function NativeTabsLayout() {
   return (
     <NativeTabs>
-      <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="(pokedex)">
+        <NativeTabs.Trigger.Label>Pokédex</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           {...Platform.select({
-            ios: { sf: { default: "house", selected: "house.fill" } },
+            ios: { sf: { default: "list.bullet", selected: "list.bullet" } },
             default: {
-              src: <NativeTabs.Trigger.VectorIcon family={MaterialIcons} name="home" />,
+              src: (
+                <NativeTabs.Trigger.VectorIcon
+                  family={MaterialIcons}
+                  name="catching-pokemon"
+                />
+              ),
             },
           })}
         />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="info">
-        <NativeTabs.Trigger.Label>Info</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="(favorites)">
+        <NativeTabs.Trigger.Label>Favorites</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           {...Platform.select({
-            ios: { sf: "cursorarrow.rays" },
+            ios: { sf: { default: "heart", selected: "heart.fill" } },
             default: {
-              src: <NativeTabs.Trigger.VectorIcon family={MaterialIcons} name="info" />,
+              src: (
+                <NativeTabs.Trigger.VectorIcon
+                  family={MaterialIcons}
+                  name="favorite"
+                />
+              ),
             },
           })}
         />
